@@ -1,7 +1,7 @@
+from django.conf import settings
 from django.db import models
 
 
-from django.db import models
 
 
 class MovieManager(models.Manager):
@@ -123,3 +123,29 @@ class Role(models.Model):
             'movie',
             'person',
             'name')
+
+
+class Vote(models.Model):
+    UP = 1
+    DOWN = -1
+    VALUE_CHOICES = (
+        (UP, "&#128077;"),
+        (DOWN, "&#128078;"),
+    )
+    value = models.SmallIntegerField(
+        choices=VALUE_CHOICES,
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    movie = models.ForeignKey(
+        Movie,
+        on_delete=models.CASCADE,
+    )
+    voted_on = models.DateTimeField(
+        auto_now=True
+    )
+
+    class Meta:
+        unique_together = ('user', 'movie')
