@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+Logout - {{ block.super }}
+{% endblock %}
+
+{% block main %}
+<h1>Logout</h1>
+      <a href="{% url 'user:login' %}">
+        Login
+      </a>
+{% endblock %}
