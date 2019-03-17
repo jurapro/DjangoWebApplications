@@ -5,10 +5,25 @@
 {% endblock  %}
 
 {% block main %}
-<h1>{{ object }}</h1>
-<p class="lead">
-    {{ object.plot }}
+<div class="col">
+    <h1>{{ object }}</h1>
+    <p class="lead">
+        {{ object.plot }}
+    </p>
+</div>
+<ul class="movie-image list-inline">
+    {% for i in object.movieimage_set.all %}
+    <li class="list-inline-item">
+        <img src="{{ i.image.url }}" class="img-thumbnail">
+    </li>
+    {% endfor %}
+</ul>
+<p>
+    Directed
+    by {{ object.director }}
 </p>
+
+
 {% endblock %}
 
 {% block sidebar %}
@@ -24,20 +39,37 @@
     </h2>
 </div>
 
+{% if image_form %}
+<div>
+    <h2>Upload New Image</h2>
+    <form method="post"
+          enctype="multipart/form-data"
+          action="{% url 'core:MovieImageUpload' movie_id=object.id %}">
+        {% csrf_token %}
+        {{ image_form.as_p }}
+        <p>
+            <button class="btn brn-primary">
+                Upload
+            </button>
+        </p>
+    </form>
+</div>
+{% endif %}
+
 <div>
     {% if vote_form %}
-        <form
+    <form
             method="post"
             action="{{ vote_form_url }}">
-            {% csrf_token %}
-            {{ vote_form.as_p }}
-            <button
+        {% csrf_token %}
+        {{ vote_form.as_p }}
+        <button
                 class="btn btn-primary">
             Vote
-            </button>
-        </form>
+        </button>
+    </form>
     {% else %}
-        <p>Login to vote for this </p>
+    <p>Login to vote for this </p>
     {% endif %}
 </div>
 
